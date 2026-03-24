@@ -26,7 +26,7 @@ namespace ProyectorFinal
         {
             Form1 f = new Form1();
             f.Show();
-            this.Show();
+
         }
     }
 }
