@@ -28,5 +28,11 @@ namespace ProyectorFinal
             f.Show();
 
         }
+
+        private void departamentoToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Departamento f = new Departamento();
+            f.Show();
+        }
     }
 }

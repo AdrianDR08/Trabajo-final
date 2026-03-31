@@ -61,6 +61,12 @@
     <Compile Include="Cargos.cs">
       <DependentUpon>SistemaEmpleadosModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Departamento.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Departamento.Designer.cs">
+      <DependentUpon>Departamento.cs</DependentUpon>
+    </Compile>
     <Compile Include="Departamentos.cs">
       <DependentUpon>SistemaEmpleadosModel.tt</DependentUpon>
     </Compile>
@@ -96,6 +102,9 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>SistemaEmpleadosModel.edmx</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="Departamento.resx">
+      <DependentUpon>Departamento.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
