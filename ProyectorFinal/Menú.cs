@@ -34,5 +34,12 @@ namespace ProyectorFinal
             Departamento f = new Departamento();
             f.Show();
         }
+
+        private void cargosToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Cargo f = new Cargo();
+            f.Show();
+
+        }
     }
 }

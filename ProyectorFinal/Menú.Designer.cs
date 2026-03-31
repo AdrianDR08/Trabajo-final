@@ -32,6 +32,7 @@
             this.archivosToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.salirToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.departamentoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.cargosToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -49,7 +50,8 @@
             // 
             this.archivosToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.salirToolStripMenuItem,
-            this.departamentoToolStripMenuItem});
+            this.departamentoToolStripMenuItem,
+            this.cargosToolStripMenuItem});
             this.archivosToolStripMenuItem.Name = "archivosToolStripMenuItem";
             this.archivosToolStripMenuItem.Size = new System.Drawing.Size(82, 20);
             this.archivosToolStripMenuItem.Text = "Formularios";
@@ -68,6 +70,13 @@
             this.departamentoToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.departamentoToolStripMenuItem.Text = "Departamento";
             this.departamentoToolStripMenuItem.Click += new System.EventHandler(this.departamentoToolStripMenuItem_Click);
+            // 
+            // cargosToolStripMenuItem
+            // 
+            this.cargosToolStripMenuItem.Name = "cargosToolStripMenuItem";
+            this.cargosToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.cargosToolStripMenuItem.Text = "Cargos";
+            this.cargosToolStripMenuItem.Click += new System.EventHandler(this.cargosToolStripMenuItem_Click);
             // 
             // Menú
             // 
@@ -91,5 +100,6 @@
         private System.Windows.Forms.ToolStripMenuItem archivosToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem salirToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem departamentoToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem cargosToolStripMenuItem;
     }
 }

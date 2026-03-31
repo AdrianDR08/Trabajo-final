@@ -58,6 +58,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Cargo.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Cargo.Designer.cs">
+      <DependentUpon>Cargo.cs</DependentUpon>
+    </Compile>
     <Compile Include="Cargos.cs">
       <DependentUpon>SistemaEmpleadosModel.tt</DependentUpon>
     </Compile>
@@ -102,6 +108,9 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>SistemaEmpleadosModel.edmx</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="Cargo.resx">
+      <DependentUpon>Cargo.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Departamento.resx">
       <DependentUpon>Departamento.cs</DependentUpon>
     </EmbeddedResource>
