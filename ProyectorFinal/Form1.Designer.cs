@@ -150,10 +150,11 @@
             // 
             // txtSalario
             // 
-            this.txtSalario.Location = new System.Drawing.Point(96, 186);
+            this.txtSalario.Location = new System.Drawing.Point(96, 184);
             this.txtSalario.Name = "txtSalario";
             this.txtSalario.Size = new System.Drawing.Size(100, 20);
             this.txtSalario.TabIndex = 12;
+            this.txtSalario.TextChanged += new System.EventHandler(this.txtSalario_TextChanged);
             // 
             // label7
             // 

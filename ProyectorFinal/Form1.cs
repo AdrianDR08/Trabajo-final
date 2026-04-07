@@ -69,6 +69,24 @@ namespace ProyectorFinal
                 return;
             }
 
+            decimal afp = salario * 0.0287m;
+            decimal ars = salario * 0.0304m;
+            decimal isr = salario * 0.10m;
+
+            DateTime inicio = dtpFecha.Value;
+            DateTime hoy = DateTime.Now;
+
+            int años = hoy.Year - inicio.Year;
+            int meses = hoy.Month - inicio.Month;
+
+            if (meses < 0)
+            {
+                años--;
+                meses += 12;
+            }
+
+            string tiempo = años + " años y " + meses + " meses";
+
             Empleados emp = new Empleados();
 
             emp.ID = id;
@@ -83,6 +101,8 @@ namespace ProyectorFinal
             db.SaveChanges();
 
             dgvEmpleados.DataSource = db.Empleados.ToList();
+
+            MessageBox.Show("AFP: " + afp + " | ARS: " + ars + " | ISR: " + isr + " | Tiempo: " + tiempo);
         }
 
         private void btnActualizar_Click(object sender, EventArgs e)
@@ -160,6 +180,11 @@ namespace ProyectorFinal
                 txtSalario.Text = fila.Cells["Salario"].Value.ToString();
                 cmbEstado.Text = fila.Cells["Estado"].Value.ToString();
             }
+        }
+
+        private void txtSalario_TextChanged(object sender, EventArgs e)
+        {
+
         }
     }
 
