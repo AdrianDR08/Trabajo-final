@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -33,9 +34,22 @@ namespace ProyectorFinal
             cmbEstado.Items.Add("No vigente");
         }
 
-        private void btnMostrar_Click(object sender, EventArgs e)
+        private void btnMostrar_Click(object sender, EventArgs a)
         {
-            dgvEmpleados.DataSource = db.Empleados.ToList();
+            var lista = db.Empleados.ToList()
+            .Select(e => new
+            {
+                e.ID,
+                e.Nombre,
+                Departamento = e.DepartamentoID,
+                Cargo = e.CargoID,
+                e.FechaInicio,
+                e.Estado,
+                e.Salario
+            })
+            .ToList();
+
+            dgvEmpleados.DataSource = lista;
         }
 
         private void btnAgregar_Click(object sender, EventArgs e)
@@ -174,8 +188,8 @@ namespace ProyectorFinal
 
                 txtID.Text = fila.Cells["ID"].Value.ToString();
                 txtNombre.Text = fila.Cells["Nombre"].Value.ToString();
-                cmbDepartamento.SelectedValue = fila.Cells["DepartamentoID"].Value;
-                cmbCargo.SelectedValue = fila.Cells["CargoID"].Value;
+                cmbDepartamento.SelectedValue = fila.Cells["Departamento"].Value;
+                cmbCargo.SelectedValue = fila.Cells["Cargo"].Value;
                 dtpFecha.Value = Convert.ToDateTime(fila.Cells["FechaInicio"].Value);
                 txtSalario.Text = fila.Cells["Salario"].Value.ToString();
                 cmbEstado.Text = fila.Cells["Estado"].Value.ToString();
@@ -183,6 +197,46 @@ namespace ProyectorFinal
         }
 
         private void txtSalario_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnCSV_Click(object sender, EventArgs e)
+        {
+            SaveFileDialog sfd = new SaveFileDialog();
+            sfd.Filter = "CSV (*.csv)|*.csv";
+
+            if (sfd.ShowDialog() == DialogResult.OK)
+            {
+                StreamWriter sw = new StreamWriter(sfd.FileName);
+
+                for (int i = 0; i < dgvEmpleados.Columns.Count; i++)
+                {
+                    sw.Write(dgvEmpleados.Columns[i].HeaderText + ",");
+                }
+
+                sw.WriteLine();
+
+                foreach (DataGridViewRow fila in dgvEmpleados.Rows)
+                {
+                    if (!fila.IsNewRow)
+                    {
+                        for (int i = 0; i < dgvEmpleados.Columns.Count; i++)
+                        {
+                            sw.Write(fila.Cells[i].Value + ",");
+                        }
+
+                        sw.WriteLine();
+                    }
+                }
+
+                sw.Close();
+
+                MessageBox.Show("Archivo CSV exportado");
+            }
+        }
+
+        private void dtpFecha_ValueChanged(object sender, EventArgs e)
         {
 
         }
