@@ -1,12 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace ProyectorFinal
@@ -18,6 +13,33 @@ namespace ProyectorFinal
         public Form1()
         {
             InitializeComponent();
+        }
+        
+
+        private void CargarEmpleados()
+        {
+            var lista = db.Empleados.ToList()
+            .Select(emp => new
+            {
+                emp.ID,
+                emp.Nombre,
+                Departamento = db.Departamentos
+                    .Where(d => d.DepartamentoID == emp.DepartamentoID)
+                    .Select(d => d.Nombre)
+                    .FirstOrDefault(),
+
+                Cargo = db.Cargos
+                    .Where(c => c.CargoID == emp.CargoID)
+                    .Select(c => c.Nombre)
+                    .FirstOrDefault(),
+
+                emp.FechaInicio,
+                emp.Salario,
+                emp.Estado
+            })
+            .ToList();
+
+            dgvEmpleados.DataSource = lista;
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -32,25 +54,15 @@ namespace ProyectorFinal
 
             cmbEstado.Items.Add("Vigente");
             cmbEstado.Items.Add("No vigente");
+
+            CargarEmpleados();
         }
 
-        private void btnMostrar_Click(object sender, EventArgs a)
+        private void btnMostrar_Click(object sender, EventArgs e)
         {
-            var lista = db.Empleados.ToList()
-            .Select(e => new
-            {
-                e.ID,
-                e.Nombre,
-                Departamento = e.DepartamentoID,
-                Cargo = e.CargoID,
-                e.FechaInicio,
-                e.Estado,
-                e.Salario
-            })
-            .ToList();
-
-            dgvEmpleados.DataSource = lista;
+            CargarEmpleados();
         }
+        
 
         private void btnAgregar_Click(object sender, EventArgs e)
         {
@@ -114,7 +126,7 @@ namespace ProyectorFinal
             db.Empleados.Add(emp);
             db.SaveChanges();
 
-            dgvEmpleados.DataSource = db.Empleados.ToList();
+            CargarEmpleados();
 
             MessageBox.Show("AFP: " + afp + " | ARS: " + ars + " | ISR: " + isr + " | Tiempo: " + tiempo);
         }
@@ -153,7 +165,7 @@ namespace ProyectorFinal
 
             db.SaveChanges();
 
-            dgvEmpleados.DataSource = db.Empleados.ToList();
+            CargarEmpleados();
         }
 
         private void btnEliminar_Click(object sender, EventArgs e)
@@ -177,25 +189,27 @@ namespace ProyectorFinal
             db.Empleados.Remove(emp);
             db.SaveChanges();
 
-            dgvEmpleados.DataSource = db.Empleados.ToList();
+            CargarEmpleados();
         }
 
         private void dgvEmpleados_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (e.RowIndex >= 0)
-            {
-                DataGridViewRow fila = dgvEmpleados.Rows[e.RowIndex];
+            if (e.RowIndex < 0) return;
 
-                txtID.Text = fila.Cells["ID"].Value.ToString();
-                txtNombre.Text = fila.Cells["Nombre"].Value.ToString();
-                cmbDepartamento.SelectedValue = fila.Cells["Departamento"].Value;
-                cmbCargo.SelectedValue = fila.Cells["Cargo"].Value;
-                dtpFecha.Value = Convert.ToDateTime(fila.Cells["FechaInicio"].Value);
-                txtSalario.Text = fila.Cells["Salario"].Value.ToString();
-                cmbEstado.Text = fila.Cells["Estado"].Value.ToString();
-            }
+            DataGridViewRow fila = dgvEmpleados.Rows[e.RowIndex];
+
+            txtID.Text = fila.Cells["ID"].Value.ToString();
+            txtNombre.Text = fila.Cells["Nombre"].Value.ToString();
+            txtSalario.Text = fila.Cells["Salario"].Value.ToString();
+            cmbEstado.Text = fila.Cells["Estado"].Value.ToString();
+            cmbDepartamento.Text = fila.Cells["Departamento"].Value.ToString();
+            cmbCargo.Text = fila.Cells["Cargo"].Value.ToString();
+            dtpFecha.Value = Convert.ToDateTime(fila.Cells["FechaInicio"].Value);
         }
+        private void dtpFecha_ValueChanged(object sender, EventArgs e)
+        {
 
+        }
         private void txtSalario_TextChanged(object sender, EventArgs e)
         {
 
@@ -208,37 +222,45 @@ namespace ProyectorFinal
 
             if (sfd.ShowDialog() == DialogResult.OK)
             {
-                StreamWriter sw = new StreamWriter(sfd.FileName);
-
-                for (int i = 0; i < dgvEmpleados.Columns.Count; i++)
+                using (StreamWriter sw = new StreamWriter(sfd.FileName))
                 {
-                    sw.Write(dgvEmpleados.Columns[i].HeaderText + ",");
-                }
-
-                sw.WriteLine();
-
-                foreach (DataGridViewRow fila in dgvEmpleados.Rows)
-                {
-                    if (!fila.IsNewRow)
+                    for (int i = 0; i < dgvEmpleados.Columns.Count; i++)
                     {
-                        for (int i = 0; i < dgvEmpleados.Columns.Count; i++)
-                        {
-                            sw.Write(fila.Cells[i].Value + ",");
-                        }
+                        sw.Write(dgvEmpleados.Columns[i].HeaderText);
 
-                        sw.WriteLine();
+                        if (i < dgvEmpleados.Columns.Count - 1)
+                            sw.Write(",");
+                    }
+
+                    sw.WriteLine();
+
+                    foreach (DataGridViewRow fila in dgvEmpleados.Rows)
+                    {
+                        if (!fila.IsNewRow)
+                        {
+                            for (int i = 0; i < dgvEmpleados.Columns.Count; i++)
+                            {
+                                var valor = fila.Cells[i].Value;
+
+                                if (valor != null)
+                                {
+                                    if (valor is DateTime)
+                                        sw.Write(((DateTime)valor).ToString("dd/MM/yyyy"));
+                                    else
+                                        sw.Write(valor.ToString());
+                                }
+
+                                if (i < dgvEmpleados.Columns.Count - 1)
+                                    sw.Write(",");
+                            }
+
+                            sw.WriteLine();
+                        }
                     }
                 }
 
-                sw.Close();
-
                 MessageBox.Show("Archivo CSV exportado");
             }
-        }
-
-        private void dtpFecha_ValueChanged(object sender, EventArgs e)
-        {
-
         }
     }
 
