@@ -1,4 +1,6 @@
-﻿using System;
+﻿using iTextSharp.text;
+using iTextSharp.text.pdf;
+using System;
 using System.Data;
 using System.IO;
 using System.Linq;
@@ -262,7 +264,64 @@ namespace ProyectorFinal
                 MessageBox.Show("Archivo CSV exportado");
             }
         }
-    }
 
+        private void btnPDF_Click(object sender, EventArgs e)
+        {
+            SaveFileDialog sfd = new SaveFileDialog();
+            sfd.Filter = "PDF (*.pdf)|*.pdf";
+
+            if (sfd.ShowDialog() == DialogResult.OK)
+            {
+                try
+                {
+                    using (FileStream fs = new FileStream(sfd.FileName, FileMode.Create))
+                    {
+                        Document doc = new Document(PageSize.A4);
+                        PdfWriter.GetInstance(doc, fs);
+
+                        doc.Open();
+
+                        PdfPTable tabla = new PdfPTable(dgvEmpleados.Columns.Count);
+
+                        foreach (DataGridViewColumn col in dgvEmpleados.Columns)
+                        {
+                            tabla.AddCell(col.HeaderText);
+                        }
+
+                        foreach (DataGridViewRow fila in dgvEmpleados.Rows)
+                        {
+                            if (!fila.IsNewRow)
+                            {
+                                foreach (DataGridViewCell celda in fila.Cells)
+                                {
+                                    if (celda.Value != null)
+                                    {
+                                        if (celda.Value is DateTime)
+                                            tabla.AddCell(((DateTime)celda.Value).ToString("dd/MM/yyyy"));
+                                        else
+                                            tabla.AddCell(celda.Value.ToString());
+                                    }
+                                    else
+                                    {
+                                        tabla.AddCell("");
+                                    }
+                                }
+                            }
+                        }
+
+                        doc.Add(tabla);
+                        doc.Close();
+                    }
+
+                    MessageBox.Show("PDF exportado correctamente");
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error al crear PDF: " + ex.Message);
+                }
+            }
+        }
+
+}
 }
 

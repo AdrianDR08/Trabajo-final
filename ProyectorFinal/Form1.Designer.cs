@@ -50,6 +50,7 @@
             this.btnEliminar = new System.Windows.Forms.Button();
             this.dgvEmpleados = new System.Windows.Forms.DataGridView();
             this.btnCSV = new System.Windows.Forms.Button();
+            this.btnPDF = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dgvEmpleados)).BeginInit();
             this.SuspendLayout();
             // 
@@ -156,7 +157,6 @@
             this.txtSalario.Name = "txtSalario";
             this.txtSalario.Size = new System.Drawing.Size(100, 20);
             this.txtSalario.TabIndex = 12;
-     
             // 
             // label7
             // 
@@ -226,7 +226,7 @@
             // 
             // btnCSV
             // 
-            this.btnCSV.Location = new System.Drawing.Point(584, 131);
+            this.btnCSV.Location = new System.Drawing.Point(685, 122);
             this.btnCSV.Name = "btnCSV";
             this.btnCSV.Size = new System.Drawing.Size(75, 23);
             this.btnCSV.TabIndex = 20;
@@ -234,11 +234,22 @@
             this.btnCSV.UseVisualStyleBackColor = true;
             this.btnCSV.Click += new System.EventHandler(this.btnCSV_Click);
             // 
+            // btnPDF
+            // 
+            this.btnPDF.Location = new System.Drawing.Point(685, 158);
+            this.btnPDF.Name = "btnPDF";
+            this.btnPDF.Size = new System.Drawing.Size(75, 23);
+            this.btnPDF.TabIndex = 21;
+            this.btnPDF.Text = "ExportalPDF";
+            this.btnPDF.UseVisualStyleBackColor = true;
+            this.btnPDF.Click += new System.EventHandler(this.btnPDF_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.btnPDF);
             this.Controls.Add(this.btnCSV);
             this.Controls.Add(this.dgvEmpleados);
             this.Controls.Add(this.btnEliminar);
@@ -291,6 +302,7 @@
         private System.Windows.Forms.Button btnEliminar;
         private System.Windows.Forms.DataGridView dgvEmpleados;
         private System.Windows.Forms.Button btnCSV;
+        private System.Windows.Forms.Button btnPDF;
     }
 }
 

@@ -25,8 +25,8 @@ namespace ProyectorFinal
             throw new UnintentionalCodeFirstException();
         }
     
-        public virtual DbSet<Cargos> Cargos { get; set; }
         public virtual DbSet<Departamentos> Departamentos { get; set; }
         public virtual DbSet<Empleados> Empleados { get; set; }
+        public virtual DbSet<Cargos> Cargos { get; set; }
     }
 }

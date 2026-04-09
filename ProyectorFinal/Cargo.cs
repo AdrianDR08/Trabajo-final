@@ -1,8 +1,11 @@
-﻿using System;
+﻿using iTextSharp.text;
+using iTextSharp.text.pdf;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -38,38 +41,37 @@ namespace ProyectorFinal
 
         private void btnAgregar_Click(object sender, EventArgs e)
         {
-            int id;
-
-            if (!int.TryParse(txtID.Text, out id))
-            {
-                MessageBox.Show("ID inválido");
-                return;
-            }
-
-            if (txtNombre.Text == "")
+            if (string.IsNullOrWhiteSpace(txtNombre.Text))
             {
                 MessageBox.Show("Ingrese nombre");
                 return;
             }
 
-            var existe = db.Cargos.Find(id);
-
-            if (existe != null)
+            if (db.Cargos.Count() >= 100)
             {
-                MessageBox.Show("ID ya existe");
+                MessageBox.Show("No se pueden agregar más de 100 cargos");
                 return;
             }
 
-            Cargos car = new Cargos();
+            try
+            {
+                Cargos car = new Cargos();
 
-            car.CargoID = id;
-            car.Nombre = txtNombre.Text;
+                car.Nombre = txtNombre.Text.Trim();
 
-            db.Cargos.Add(car);
-            db.SaveChanges();
+                db.Cargos.Add(car);
+                db.SaveChanges();
 
-            dgvCargo.DataSource = db.Cargos.ToList();
+                dgvCargo.DataSource = db.Cargos.ToList();
+
+                MessageBox.Show("Cargo agregado correctamente");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al agregar: " + ex.Message);
+            }
         }
+
 
         private void btnActualizar_Click(object sender, EventArgs e)
         {
@@ -118,6 +120,77 @@ namespace ProyectorFinal
             db.SaveChanges();
 
             dgvCargo.DataSource = db.Cargos.ToList();
+        }
+
+        private void btnPDF_Click(object sender, EventArgs e)
+        {
+            SaveFileDialog sfd = new SaveFileDialog();
+            sfd.Filter = "PDF (*.pdf)|*.pdf";
+
+            if (sfd.ShowDialog() == DialogResult.OK)
+            {
+                try
+                {
+                    var lista = db.Cargos.ToList();
+
+                    using (FileStream fs = new FileStream(sfd.FileName, FileMode.Create))
+                    {
+                        Document doc = new Document(PageSize.A4);
+                        PdfWriter.GetInstance(doc, fs);
+
+                        doc.Open();
+
+                        PdfPTable tabla = new PdfPTable(2);
+
+                        tabla.AddCell("ID");
+                        tabla.AddCell("Nombre");
+
+                        foreach (var c in lista)
+                        {
+                            tabla.AddCell(c.CargoID.ToString());
+                            tabla.AddCell(c.Nombre);
+                        }
+
+                        doc.Add(tabla);
+                        doc.Close();
+                    }
+
+                    MessageBox.Show("PDF de Cargos exportado");
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error: " + ex.Message);
+                }
+            }
+}
+
+        private void btnCSV_Click(object sender, EventArgs e)
+        {
+            SaveFileDialog sfd = new SaveFileDialog();
+            sfd.Filter = "CSV (*.csv)|*.csv";
+
+            if (sfd.ShowDialog() == DialogResult.OK)
+            {
+                try
+                {
+                    using (StreamWriter sw = new StreamWriter(sfd.FileName))
+                    {
+                        sw.WriteLine("ID;Nombre");
+
+                        foreach (var c in db.Cargos.ToList())
+                        {
+                            sw.WriteLine(c.CargoID + ";" + c.Nombre);
+                        }
+                    }
+
+                    MessageBox.Show("CSV de Cargos exportado");
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error: " + ex.Message);
+                }
+            }
+
         }
     }
 }

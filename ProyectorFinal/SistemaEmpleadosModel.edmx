@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="ProyectoFinalModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="ProyectoFinalModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Cargos">
           <Key>
             <PropertyRef Name="CargoID" />
@@ -68,19 +68,10 @@
             <End Role="Empleados" EntitySet="Empleados" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="ProyectoFinalModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
-        <EntityType Name="Cargos">
-          <Key>
-            <PropertyRef Name="CargoID" />
-          </Key>
-          <Property Name="CargoID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Nombre" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
-          <NavigationProperty Name="Empleados" Relationship="Self.FK__Empleados__Cargo__4F7CD00D" FromRole="Cargos" ToRole="Empleados" />
-        </EntityType>
         <EntityType Name="Departamentos">
           <Key>
             <PropertyRef Name="DepartamentoID" />
@@ -100,21 +91,9 @@
           <Property Name="FechaInicio" Type="DateTime" Nullable="false" Precision="0" />
           <Property Name="Salario" Type="Decimal" Precision="10" Scale="2" Nullable="false" />
           <Property Name="Estado" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
-          <NavigationProperty Name="Cargos" Relationship="Self.FK__Empleados__Cargo__4F7CD00D" FromRole="Empleados" ToRole="Cargos" />
           <NavigationProperty Name="Departamentos" Relationship="Self.FK__Empleados__Depar__4E88ABD4" FromRole="Empleados" ToRole="Departamentos" />
+          <NavigationProperty Name="Cargos" Relationship="ProyectoFinalModel.FK__Empleados__Cargo__4F7CD00D" FromRole="Empleados" ToRole="Cargos" />
         </EntityType>
-        <Association Name="FK__Empleados__Cargo__4F7CD00D">
-          <End Role="Cargos" Type="Self.Cargos" Multiplicity="1" />
-          <End Role="Empleados" Type="Self.Empleados" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Cargos">
-              <PropertyRef Name="CargoID" />
-            </Principal>
-            <Dependent Role="Empleados">
-              <PropertyRef Name="CargoID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK__Empleados__Depar__4E88ABD4">
           <End Role="Departamentos" Type="Self.Departamentos" Multiplicity="1" />
           <End Role="Empleados" Type="Self.Empleados" Multiplicity="*" />
@@ -128,32 +107,44 @@
           </ReferentialConstraint>
         </Association>
         <EntityContainer Name="ProyectoFinalEntities2" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="Cargos" EntityType="Self.Cargos" />
           <EntitySet Name="Departamentos" EntityType="Self.Departamentos" />
           <EntitySet Name="Empleados" EntityType="Self.Empleados" />
-          <AssociationSet Name="FK__Empleados__Cargo__4F7CD00D" Association="Self.FK__Empleados__Cargo__4F7CD00D">
-            <End Role="Cargos" EntitySet="Cargos" />
-            <End Role="Empleados" EntitySet="Empleados" />
-          </AssociationSet>
           <AssociationSet Name="FK__Empleados__Depar__4E88ABD4" Association="Self.FK__Empleados__Depar__4E88ABD4">
             <End Role="Departamentos" EntitySet="Departamentos" />
             <End Role="Empleados" EntitySet="Empleados" />
           </AssociationSet>
+          <EntitySet Name="Cargos" EntityType="ProyectoFinalModel.Cargos" />
+          <AssociationSet Name="FK__Empleados__Cargo__4F7CD00D" Association="ProyectoFinalModel.FK__Empleados__Cargo__4F7CD00D">
+            <End Role="Cargos" EntitySet="Cargos" />
+            <End Role="Empleados" EntitySet="Empleados" />
+          </AssociationSet>
         </EntityContainer>
+        <EntityType Name="Cargos">
+          <Key>
+            <PropertyRef Name="CargoID" />
+          </Key>
+          <Property Name="CargoID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Nombre" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Empleados" Relationship="ProyectoFinalModel.FK__Empleados__Cargo__4F7CD00D" FromRole="Cargos" ToRole="Empleados" />
+        </EntityType>
+        <Association Name="FK__Empleados__Cargo__4F7CD00D">
+          <End Type="ProyectoFinalModel.Cargos" Role="Cargos" Multiplicity="1" />
+          <End Type="ProyectoFinalModel.Empleados" Role="Empleados" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Cargos">
+              <PropertyRef Name="CargoID" />
+            </Principal>
+            <Dependent Role="Empleados">
+              <PropertyRef Name="CargoID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="ProyectoFinalModelStoreContainer" CdmEntityContainer="ProyectoFinalEntities2">
-          <EntitySetMapping Name="Cargos">
-            <EntityTypeMapping TypeName="ProyectoFinalModel.Cargos">
-              <MappingFragment StoreEntitySet="Cargos">
-                <ScalarProperty Name="CargoID" ColumnName="CargoID" />
-                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="Departamentos">
             <EntityTypeMapping TypeName="ProyectoFinalModel.Departamentos">
               <MappingFragment StoreEntitySet="Departamentos">
@@ -172,6 +163,14 @@
                 <ScalarProperty Name="FechaInicio" ColumnName="FechaInicio" />
                 <ScalarProperty Name="Salario" ColumnName="Salario" />
                 <ScalarProperty Name="Estado" ColumnName="Estado" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Cargos">
+            <EntityTypeMapping TypeName="ProyectoFinalModel.Cargos">
+              <MappingFragment StoreEntitySet="Cargos">
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="CargoID" ColumnName="CargoID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

@@ -22,7 +22,7 @@ namespace ProyectorFinal
         public decimal Salario { get; set; }
         public string Estado { get; set; }
     
-        public virtual Cargos Cargos { get; set; }
         public virtual Departamentos Departamentos { get; set; }
+        public virtual Cargos Cargos { get; set; }
     }
 }

@@ -37,6 +37,8 @@
             this.btnActualizar = new System.Windows.Forms.Button();
             this.btnEliminar = new System.Windows.Forms.Button();
             this.dgvDepartamentos = new System.Windows.Forms.DataGridView();
+            this.btnCSV = new System.Windows.Forms.Button();
+            this.btnPDF = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dgvDepartamentos)).BeginInit();
             this.SuspendLayout();
             // 
@@ -121,11 +123,33 @@
             this.dgvDepartamentos.TabIndex = 8;
             this.dgvDepartamentos.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvDepartamentos_CellContentClick);
             // 
+            // btnCSV
+            // 
+            this.btnCSV.Location = new System.Drawing.Point(602, 51);
+            this.btnCSV.Name = "btnCSV";
+            this.btnCSV.Size = new System.Drawing.Size(75, 23);
+            this.btnCSV.TabIndex = 9;
+            this.btnCSV.Text = "ExportalCSV";
+            this.btnCSV.UseVisualStyleBackColor = true;
+            this.btnCSV.Click += new System.EventHandler(this.btnCSV_Click);
+            // 
+            // btnPDF
+            // 
+            this.btnPDF.Location = new System.Drawing.Point(602, 89);
+            this.btnPDF.Name = "btnPDF";
+            this.btnPDF.Size = new System.Drawing.Size(75, 23);
+            this.btnPDF.TabIndex = 10;
+            this.btnPDF.Text = "ExportalPDF";
+            this.btnPDF.UseVisualStyleBackColor = true;
+            this.btnPDF.Click += new System.EventHandler(this.btnPDF_Click);
+            // 
             // Departamento
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.btnPDF);
+            this.Controls.Add(this.btnCSV);
             this.Controls.Add(this.dgvDepartamentos);
             this.Controls.Add(this.btnEliminar);
             this.Controls.Add(this.btnActualizar);
@@ -155,5 +179,7 @@
         private System.Windows.Forms.Button btnActualizar;
         private System.Windows.Forms.Button btnEliminar;
         private System.Windows.Forms.DataGridView dgvDepartamentos;
+        private System.Windows.Forms.Button btnCSV;
+        private System.Windows.Forms.Button btnPDF;
     }
 }

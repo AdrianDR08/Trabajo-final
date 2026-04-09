@@ -1,8 +1,11 @@
-﻿using System;
+﻿using iTextSharp.text;
+using iTextSharp.text.pdf;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -56,12 +59,33 @@ namespace ProyectorFinal
 
             dep.DepartamentoID = id;
             dep.Nombre = txtNombre.Text;
+            {
+                if (string.IsNullOrWhiteSpace(txtNombre.Text))
+                {
+                    MessageBox.Show("Ingrese nombre");
+                    return;
+                }
 
-            db.Departamentos.Add(dep);
-            db.SaveChanges();
+                try
+                {
+                    Departamentos depart = new Departamentos();
 
-            dgvDepartamentos.DataSource = db.Departamentos.ToList();
+                    dep.Nombre = txtNombre.Text.Trim();
+
+                    db.Departamentos.Add(dep);
+                    db.SaveChanges();
+
+                    dgvDepartamentos.DataSource = db.Departamentos.ToList();
+
+                    MessageBox.Show("Departamento agregado correctamente");
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error: " + ex.Message);
+                }
+            }
         }
+
 
         private void btnActualizar_Click(object sender, EventArgs e)
         {
@@ -90,26 +114,43 @@ namespace ProyectorFinal
 
         private void btnEliminar_Click(object sender, EventArgs e)
         {
-            int id;
-
-            if (!int.TryParse(txtID.Text, out id))
+            if (dgvDepartamentos.CurrentRow == null)
             {
-                MessageBox.Show("ID inválido");
+                MessageBox.Show("Seleccione un registro");
                 return;
             }
+
+            int id = Convert.ToInt32(dgvDepartamentos.CurrentRow.Cells[0].Value);
 
             var dep = db.Departamentos.Find(id);
 
             if (dep == null)
             {
-                MessageBox.Show("No existe");
+                MessageBox.Show("El departamento no existe");
                 return;
             }
 
-            db.Departamentos.Remove(dep);
-            db.SaveChanges();
+            var tieneEmpleados = db.Empleados.Any(x => x.DepartamentoID == id);
 
-            dgvDepartamentos.DataSource = db.Departamentos.ToList();
+            if (tieneEmpleados)
+            {
+                MessageBox.Show("No se puede eliminar este departamento porque tiene empleados asociados");
+                return;
+            }
+
+            try
+            {
+                db.Departamentos.Remove(dep);
+                db.SaveChanges();
+
+                dgvDepartamentos.DataSource = db.Departamentos.ToList();
+
+                MessageBox.Show("Departamento eliminado correctamente");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al eliminar: " + ex.Message);
+            }
         }
 
         private void dgvDepartamentos_CellContentClick(object sender, DataGridViewCellEventArgs e)
@@ -122,6 +163,76 @@ namespace ProyectorFinal
                 txtNombre.Text = fila.Cells["Nombre"].Value.ToString();
             }
         }
+
+        private void btnCSV_Click(object sender, EventArgs e)
+        {
+            SaveFileDialog sfd = new SaveFileDialog();
+            sfd.Filter = "CSV (*.csv)|*.csv";
+
+            if (sfd.ShowDialog() == DialogResult.OK)
+            {
+                try
+                {
+                    using (StreamWriter sw = new StreamWriter(sfd.FileName))
+                    {
+                        sw.WriteLine("ID;Nombre");
+
+                        foreach (var d in db.Departamentos.ToList())
+                        {
+                            sw.WriteLine(d.DepartamentoID + ";" + d.Nombre);
+                        }
+                    }
+
+                    MessageBox.Show("CSV de Departamentos exportado");
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error: " + ex.Message);
+                }
+            }
+        }
+
+        private void btnPDF_Click(object sender, EventArgs e)
+        {
+            SaveFileDialog sfd = new SaveFileDialog();
+            sfd.Filter = "PDF (*.pdf)|*.pdf";
+
+            if (sfd.ShowDialog() == DialogResult.OK)
+            {
+                try
+                {
+                    var lista = db.Departamentos.ToList();
+
+                    using (FileStream fs = new FileStream(sfd.FileName, FileMode.Create))
+                    {
+                        Document doc = new Document(PageSize.A4);
+                        PdfWriter.GetInstance(doc, fs);
+
+                        doc.Open();
+
+                        PdfPTable tabla = new PdfPTable(2);
+
+                        tabla.AddCell("ID");
+                        tabla.AddCell("Nombre");
+
+                        foreach (var d in lista)
+                        {
+                            tabla.AddCell(d.DepartamentoID.ToString());
+                            tabla.AddCell(d.Nombre);
+                        }
+
+                        doc.Add(tabla);
+                        doc.Close();
+                    }
+
+                    MessageBox.Show("PDF de Departamentos exportado");
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error: " + ex.Message);
+                }
+            }
+}
     }
 }
 

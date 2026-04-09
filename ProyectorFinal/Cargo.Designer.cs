@@ -37,6 +37,8 @@
             this.btnAgregar = new System.Windows.Forms.Button();
             this.btnEliminar = new System.Windows.Forms.Button();
             this.dgvCargo = new System.Windows.Forms.DataGridView();
+            this.btnCSV = new System.Windows.Forms.Button();
+            this.btnPDF = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dgvCargo)).BeginInit();
             this.SuspendLayout();
             // 
@@ -121,11 +123,33 @@
             this.dgvCargo.TabIndex = 8;
             this.dgvCargo.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentClick);
             // 
+            // btnCSV
+            // 
+            this.btnCSV.Location = new System.Drawing.Point(123, 322);
+            this.btnCSV.Name = "btnCSV";
+            this.btnCSV.Size = new System.Drawing.Size(75, 23);
+            this.btnCSV.TabIndex = 9;
+            this.btnCSV.Text = "ExportalCSV";
+            this.btnCSV.UseVisualStyleBackColor = true;
+            this.btnCSV.Click += new System.EventHandler(this.btnCSV_Click);
+            // 
+            // btnPDF
+            // 
+            this.btnPDF.Location = new System.Drawing.Point(228, 321);
+            this.btnPDF.Name = "btnPDF";
+            this.btnPDF.Size = new System.Drawing.Size(75, 23);
+            this.btnPDF.TabIndex = 10;
+            this.btnPDF.Text = "ExportalPDF";
+            this.btnPDF.UseVisualStyleBackColor = true;
+            this.btnPDF.Click += new System.EventHandler(this.btnPDF_Click);
+            // 
             // Cargo
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(476, 450);
+            this.Controls.Add(this.btnPDF);
+            this.Controls.Add(this.btnCSV);
             this.Controls.Add(this.dgvCargo);
             this.Controls.Add(this.btnEliminar);
             this.Controls.Add(this.btnAgregar);
@@ -155,5 +179,7 @@
         private System.Windows.Forms.Button btnAgregar;
         private System.Windows.Forms.Button btnEliminar;
         private System.Windows.Forms.DataGridView dgvCargo;
+        private System.Windows.Forms.Button btnCSV;
+        private System.Windows.Forms.Button btnPDF;
     }
 }
