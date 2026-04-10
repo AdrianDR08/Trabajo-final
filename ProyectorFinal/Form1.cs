@@ -167,6 +167,8 @@ namespace ProyectorFinal
 
             db.SaveChanges();
 
+            MessageBox.Show("Empleado actualizado correctamente", "Actualización", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
             CargarEmpleados();
         }
 
@@ -190,6 +192,8 @@ namespace ProyectorFinal
 
             db.Empleados.Remove(emp);
             db.SaveChanges();
+
+            MessageBox.Show("Empleado eliminado correctamente", "Eliminación", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
             CargarEmpleados();
         }

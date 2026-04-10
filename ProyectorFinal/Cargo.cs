@@ -95,6 +95,8 @@ namespace ProyectorFinal
 
             db.SaveChanges();
 
+            MessageBox.Show("Cargo actualizado correctamente", "Actualización", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
             dgvCargo.DataSource = db.Cargos.ToList();
         }
 
@@ -118,6 +120,8 @@ namespace ProyectorFinal
 
             db.Cargos.Remove(car);
             db.SaveChanges();
+
+            MessageBox.Show("Cargo eliminado correctamente", "Eliminación", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
             dgvCargo.DataSource = db.Cargos.ToList();
         }

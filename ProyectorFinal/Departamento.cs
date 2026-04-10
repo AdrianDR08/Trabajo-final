@@ -109,9 +109,10 @@ namespace ProyectorFinal
 
             db.SaveChanges();
 
+            MessageBox.Show("Departamento actualizado correctamente", "Actualización", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
             dgvDepartamentos.DataSource = db.Departamentos.ToList();
         }
-
         private void btnEliminar_Click(object sender, EventArgs e)
         {
             if (dgvDepartamentos.CurrentRow == null)
